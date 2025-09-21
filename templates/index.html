@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Audio Fake/Real Detector</title>
+</head>
+<body>
+  <h2>Upload Audio</h2>
+  <input type="file" id="audioFile" name="audio">
+  <button id="predictBtn">Predict</button>
+  <p id="result"></p>
+
+  <script>
+      document.getElementById("predictBtn").addEventListener("click", uploadAudio);
+
+      function uploadAudio(){
+          const audioInput = document.getElementById("audioFile");
+          const result = document.getElementById("result");
+
+          const file = audioInput.files[0];
+
+          if(!file){
+              alert('Please Upload an Audio');
+              return;
+          }
+
+          result.innerHTML = '';
+
+          const formData = new FormData();
+          formData.append('audio', file);
+
+          fetch('/predict', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              if(data.error){
+                  result.innerHTML = data.error;
+              }
+              else {
+                  const resultText = `Prediction: ${data.Prediction} <br> Confidence: ${(data.Confidence * 100).toFixed(2)}%`;
+                  result.innerHTML = resultText;
+              }
+          })
+          .catch(error => {
+              console.error("Error: ", error);
+              result.innerHTML = "An error occurred";
+          });
+      }
+  </script>
+</body>
+</html>

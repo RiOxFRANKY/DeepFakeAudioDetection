@@ -1,0 +1,12 @@
+# Ignore virtual environments
+myenv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+Notebook/.ipynb_checkpoints/
+
